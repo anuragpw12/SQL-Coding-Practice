@@ -1,0 +1,29 @@
+CREATE TABLE #Employee
+(
+    EmployeeId INT PRIMARY KEY,
+    EmployeeName VARCHAR(100),
+    Salary DECIMAL(10,2)
+);
+
+INSERT INTO #Employee (EmployeeId, EmployeeName, Salary)
+VALUES
+(1, 'Anurag', 50000),
+(2, 'Rahul', 75000),
+(3, 'Amit', 60000),
+(4, 'Neha', 90000),
+(5, 'Priya', 75000),
+(6, 'Karan', 45000);
+
+
+select max(Salary) from #Employee where Salary < (select max(Salary) from #Employee)
+
+;with cte as(
+	select Salary,DENSE_RANK()over(order by Salary desc) as rnk
+	from #Employee
+)
+
+select top 1 Salary
+from cte
+where rnk=2
+
+

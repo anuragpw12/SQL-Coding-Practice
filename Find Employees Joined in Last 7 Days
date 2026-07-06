@@ -1,0 +1,26 @@
+--Find Employees Joined in Last 7 Days
+
+if OBJECT_ID('tempdb..#Employee') is not null
+	drop table #Employee
+
+CREATE TABLE #Employee
+(
+    EmployeeId INT PRIMARY KEY,
+    EmployeeName VARCHAR(100),
+    JoiningDate DATE
+);
+
+INSERT INTO #Employee (EmployeeId, EmployeeName, JoiningDate)
+VALUES
+(1, 'Anurag', CAST(GETDATE() - 2 AS DATE)),
+(2, 'Rahul', CAST(GETDATE() - 5 AS DATE)),
+(3, 'Amit', CAST(GETDATE() - 8 AS DATE)),
+(4, 'Neha', CAST(GETDATE() - 1 AS DATE)),
+(5, 'Priya', CAST(GETDATE() - 10 AS DATE)),
+(6, 'Karan', CAST(GETDATE() - 7 AS DATE));
+
+
+select * from #Employee
+where JoiningDate >= DATEADD(day,-7,cast(getdate()as date))
+
+

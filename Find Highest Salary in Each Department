@@ -1,0 +1,31 @@
+--Find Highest Salary in Each Department
+
+if OBJECT_ID('tempdb..#Employee') is not null
+	drop table #Employee
+
+CREATE TABLE #Employee
+(
+    EmployeeId INT PRIMARY KEY,
+    EmployeeName VARCHAR(100),
+    DepartmentName VARCHAR(50),
+    Salary DECIMAL(10,2)
+);
+
+INSERT INTO #Employee (EmployeeId, EmployeeName, DepartmentName, Salary)
+VALUES
+(1, 'Anurag', 'IT', 90000),
+(2, 'Rahul', 'IT', 120000),
+(3, 'Amit', 'IT', 120000),
+(4, 'Neha', 'HR', 80000),
+(5, 'Priya', 'HR', 95000),
+(6, 'Karan', 'Finance', 110000),
+(7, 'Rohit', 'Finance', 105000),
+(8, 'Swapnil', 'Support', 90000);
+
+
+;with cte as 
+(
+	select employeename,DepartmentName,salary,DENSE_RANK()over(partition by DepartmentName order by salary desc) as rnk
+	from #Employee
+)
+select * from cte where rnk=1

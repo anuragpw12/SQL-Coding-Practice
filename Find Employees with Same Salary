@@ -1,0 +1,30 @@
+--Find Employees with Same Salary
+
+if OBJECT_ID('tempdb..#Employee') is not null
+	drop table #Employee
+
+CREATE TABLE #Employee
+(
+    EmployeeId INT PRIMARY KEY,
+    EmployeeName VARCHAR(100),
+    Salary DECIMAL(10,2)
+);
+
+INSERT INTO #Employee (EmployeeId, EmployeeName, Salary)
+VALUES
+(1, 'Anurag', 50000),
+(2, 'Rahul', 75000),
+(3, 'Amit', 60000),
+(4, 'Neha', 75000),
+(5, 'Priya', 90000),
+(6, 'Karan', 50000),
+(7, 'Rohit', 60000);
+
+
+;with cte as(
+	select EmployeeName, Salary,count(*)over(partition by salary) as cnt
+	from #Employee
+)
+
+select * from cte where cnt>1
+

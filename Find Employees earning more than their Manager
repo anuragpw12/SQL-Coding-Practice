@@ -1,0 +1,28 @@
+Find Employees earning more than their Manager
+
+if OBJECT_ID('tempdb..#Employee') is not null
+	drop table #Employee
+
+CREATE TABLE #Employee
+(
+    EmployeeId INT PRIMARY KEY,
+    EmployeeName VARCHAR(100),
+    Salary DECIMAL(10,2),
+    ManagerId INT NULL
+);
+
+INSERT INTO #Employee (EmployeeId, EmployeeName, Salary, ManagerId)
+VALUES
+(1, 'John', 100000, NULL), -- CEO
+(2, 'Rahul', 80000, 1),
+(3, 'Amit', 120000, 1),
+(4, 'Neha', 70000, 2),
+(5, 'Priya', 90000, 2),
+(6, 'Karan', 60000, 3);
+
+select emp.employeename as empname,emp.salary as empsalary,
+mgr.employeename as managername,mgr.salary as managersalary
+from #Employee emp
+join #Employee mgr on mgr.EmployeeId=emp.ManagerId
+where emp.Salary>mgr.Salary
+

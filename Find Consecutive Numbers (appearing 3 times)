@@ -1,0 +1,38 @@
+--Find Consecutive Numbers (appearing 3 times)
+
+if OBJECT_ID('tempdb..#Logs') is not null
+	drop table #Logs
+
+CREATE TABLE #Logs
+(
+    Id INT PRIMARY KEY,
+    Num INT
+);
+
+INSERT INTO #Logs (Id, Num)
+VALUES
+(1, 1),
+(2, 1),
+(3, 1),
+(4, 2),
+(5, 1),
+(6, 2),
+(7, 2),
+(8, 2),
+(9, 3),
+(10, 3);
+
+
+;with cte as (
+	select num,lag(num,1)over(order by id) as prev1,
+	lag(num,2)over(order by id) as prev2
+	from #Logs
+)
+
+SELECT DISTINCT Num AS ConsecutiveNums
+from cte
+where num=prev1
+and num=prev2
+
+
+

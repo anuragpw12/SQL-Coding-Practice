@@ -1,0 +1,34 @@
+--Find Top 3 Salaries in Each Department
+
+if OBJECT_ID('tempdb..#Employee') is not null
+	drop table #Employee
+
+CREATE TABLE #Employee
+(
+    EmployeeId INT PRIMARY KEY,
+    EmployeeName VARCHAR(100),
+    DepartmentName VARCHAR(50),
+    Salary DECIMAL(10,2)
+);
+
+INSERT INTO #Employee (EmployeeId, EmployeeName, DepartmentName, Salary)
+VALUES
+(1, 'Anurag', 'IT', 150000),
+(2, 'Rahul', 'IT', 140000),
+(3, 'Amit', 'IT', 130000),
+(4, 'Neha', 'IT', 120000),
+(5, 'Priya', 'HR', 110000),
+(6, 'Karan', 'HR', 100000),
+(7, 'Rohit', 'HR', 90000),
+(8, 'Pooja', 'HR', 80000),
+(9, 'Vikas', 'Finance', 125000),
+(10, 'Sneha', 'Finance', 115000),
+(11, 'Ajay', 'Finance', 105000),
+(12, 'Nikita', 'Finance', 95000);
+
+;with cte as 
+(
+	select employeename,DepartmentName,salary,DENSE_RANK()over(partition by DepartmentName order by salary desc) as rnk
+	from #Employee
+)
+select * from cte where rnk<=3

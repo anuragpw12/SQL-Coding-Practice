@@ -1,0 +1,36 @@
+--Find Duplicate Emails
+
+if OBJECT_ID('tempdb..#Person') is not null
+	drop table #Person
+
+CREATE TABLE #Person
+(
+    Id INT PRIMARY KEY,
+    Name VARCHAR(100),
+    Email VARCHAR(100)
+);
+
+INSERT INTO #Person (Id, Name, Email)
+VALUES
+(1, 'Anurag', 'anurag@gmail.com'),
+(2, 'Rahul', 'rahul@gmail.com'),
+(3, 'Amit', 'amit@gmail.com'),
+(4, 'Neha', 'rahul@gmail.com'),
+(5, 'Priya', 'priya@gmail.com'),
+(6, 'Karan', 'anurag@gmail.com');
+
+
+select email,count(1) as totalcount
+from #Person
+group by email
+having count(email)>1
+
+;with cte as(
+	select email,row_number()over(partition by email order by name) as counta
+	from #Person
+)
+
+select email,counta
+from cte
+where counta>1
+
